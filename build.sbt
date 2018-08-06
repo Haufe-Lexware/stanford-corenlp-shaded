@@ -44,13 +44,13 @@ coreNLPdeployWithLoginAndPassword := {
     .replaceAll("(?s)<plugins>.*</plugins>","<plugins></plugins>")
     .replace("<artifactId>stanford-corenlp</artifactId>",
       "<artifactId>stanford-corenlp-shaded</artifactId>")
-  val plugin = IO.read(baseDirectory.value / "src/corenlp/pom_shading.xml")
+  val plugin = IO.read(baseDirectory.value / "src/stanfordcorenlp/pom_shading.xml")
 
   IO.write(coreNLPdirectory / "pom.xml",pom.replace("<plugins>","<plugins>"+plugin))
 
   log.info("Create shaded jar")
   Process("sh"::"mvnw"
-    ::"package"::"-Dmaven.test.skip=true"::"--settings"::Nil,
+    ::"package"::"-Dmaven.test.skip=true"::Nil,
     coreNLPdirectory) ! procLog
 }
 
