@@ -14,10 +14,10 @@ lazy val coreNLPmodels = taskKey[Unit](
 lazy val dependencyLib = taskKey[Unit](
   s"Put dependency libraries in $appsPath/lib_managed.")
 
-lazy val coreNLPdeployWithLoginAndPassword = inputKey[Unit]("Create corenlp shaded library " +
+lazy val coreNLPcompileShaded = inputKey[Unit]("Create corenlp shaded library " +
   "and deploy to the nexus repository with provide login and password")
 
-coreNLPdeployWithLoginAndPassword := {
+coreNLPcompileShaded := {
   import scala.sys.process._
 
   val log = streams.value.log
