@@ -20,6 +20,8 @@ lazy val coreNLPcompileShaded = inputKey[Unit]("Create corenlp shaded library " 
 coreNLPcompileShaded := {
   import scala.sys.process._
 
+  val commitFor3_9_1 = "0ff7514936db082bbcaab66b2f1940de363dfb64"
+
   val log = streams.value.log
   val coreNLPdirectory : File  = baseDirectory.value / "CoreNLP"
   val procLog = ProcessLogger(l=> log.info(l),l=> log.info(l))
@@ -27,9 +29,13 @@ coreNLPcompileShaded := {
     log.info("Git reset and pull")
     Process("git"::"reset"::"--hard"::Nil,coreNLPdirectory) ! procLog
     Process("git"::"pull"::Nil,coreNLPdirectory) ! procLog
+    Process("git"::"checkout"::s"$commitFor3_9_1"::Nil, coreNLPdirectory) ! procLog
   } else {
     log.info("Git clone")
     "git clone --progress -v https://github.com/stanfordnlp/CoreNLP.git" ! procLog
+
+    log.info("Checkout specific commit (latest release)")
+    Process("git"::"checkout"::s"$commitFor3_9_1"::Nil, coreNLPdirectory) ! procLog
 
     log.info("mvnw download")
     url("https://raw.githubusercontent.com/takari/maven-wrapper/master/mvnw") #> {coreNLPdirectory / "mvnw"} ! procLog
